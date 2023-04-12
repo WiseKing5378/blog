@@ -1,9 +1,10 @@
-import './CardList.scss';
 import CardItem from '../CardItem';
+
+import style from './CardList.module.scss';
 
 function CardList() {
   return (
-    <ul>
+    <ul className={style.card_list}>
       <CardItem />
     </ul>
   );
