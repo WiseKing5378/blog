@@ -30,7 +30,7 @@ function CardList() {
         defaultCurrent={1}
         total={articlesCount}
         showSizeChanger=""
-        // onChange={}
+        onChange={(e) => console.log(e)}
         // current={}
         defaultPageSize="20"
         hideOnSinglePage

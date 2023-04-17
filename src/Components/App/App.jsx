@@ -13,7 +13,7 @@ function App() {
   const { status } = useSelector((state) => state.CardDataSlice);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchData());
+    dispatch(fetchData(0));
   }, []);
   return (
     <>
