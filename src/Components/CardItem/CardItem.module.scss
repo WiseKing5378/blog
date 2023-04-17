@@ -21,11 +21,20 @@ h3,p {
     0px 1.46302px 7.04911px rgba(0, 0, 0, 0.0282725), 0px 0.608796px 2.93329px rgba(0, 0, 0, 0.0196802);
   border-radius: 6px;
 
+  &__info{
+    overflow: hidden;
+  }
+
   &__title {
     color: rgba(24, 144, 255, 1);
     font-weight: 400;
     font-size: 20px;
     line-height: 28px;
+  }
+
+  &__tag{
+    display: flex;
+    overflow: scroll;
   }
 
   &__text {

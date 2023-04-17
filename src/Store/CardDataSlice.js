@@ -18,7 +18,7 @@ const CardDataSlice = createSlice({
   },
   reducers: {
     changePage(state, action) {
-      state.offset += action.payload;
+      state.offset = action.payload * 20 - 20;
     },
   },
   extraReducers: {

@@ -13,14 +13,11 @@ function CardItem(props) {
     <li className={style.card}>
       <div className={style.card__info}>
         <h3 className={style.card__title}>{title}</h3>
-        <Space size={[0, 8]} wrap>
+        <Space size={[0, 8]} wrap className={style.card__tag}>
           {tags}
         </Space>
-        <p className={style.card__text}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla, quo? Quidem ducimus, quaerat officiis illo
-          reprehenderit corporis impedit nostrum excepturi, et dolor assumenda voluptatum veniam qui. Nam voluptates
-          provident necessitatibus.
-        </p>
+        <p className={style.card__text}>{description}</p>
+        {/* <div className={style.card__article}>{body}</div> */}
       </div>
       <div className={style.card__author}>
         <div>

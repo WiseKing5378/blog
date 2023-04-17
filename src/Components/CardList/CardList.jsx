@@ -1,14 +1,15 @@
 import { Pagination } from 'antd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import uuid from 'react-uuid';
 
+import { changePage, fetchData } from '../../Store/CardDataSlice';
 import CardItem from '../CardItem';
 
 import style from './CardList.module.scss';
 
 function CardList() {
-  const { cardData, articlesCount } = useSelector((state) => state.CardDataSlice);
-  console.log(cardData);
+  const dispatch = useDispatch();
+  const { cardData, articlesCount, offset } = useSelector((state) => state.CardDataSlice);
   const data = cardData.map((i) => {
     const { title, description, body, updatedAt, tagList, author } = i;
     return (
@@ -30,8 +31,11 @@ function CardList() {
         defaultCurrent={1}
         total={articlesCount}
         showSizeChanger=""
-        onChange={(e) => console.log(e)}
-        // current={}
+        onChange={(e) => {
+          dispatch(changePage(e));
+          dispatch(fetchData(offset));
+        }}
+        current={(offset + 20) / 20}
         defaultPageSize="20"
         hideOnSinglePage
       />
