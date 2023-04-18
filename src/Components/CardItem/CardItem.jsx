@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Space, Tag } from 'antd';
 import uuid from 'react-uuid';
+import { format } from 'date-fns';
 
 import avt from '../../Assets/avatar.png';
 
@@ -22,7 +23,7 @@ function CardItem(props) {
       <div className={style.card__author}>
         <div>
           <p className={style.card__author_username}>{author.username}</p>
-          <span className={style.card__author_date}>{updatedAt}</span>
+          <span className={style.card__author_date}>{format(new Date(updatedAt), 'PP')}</span>
         </div>
         <img className={style.card__author_img} src={author.image ? author.image : avt} alt="avatar" />
       </div>

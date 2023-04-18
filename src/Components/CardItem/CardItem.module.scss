@@ -1,6 +1,7 @@
 li,
 ul,
-h3,p {
+h3,
+p {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -21,7 +22,7 @@ h3,p {
     0px 1.46302px 7.04911px rgba(0, 0, 0, 0.0282725), 0px 0.608796px 2.93329px rgba(0, 0, 0, 0.0196802);
   border-radius: 6px;
 
-  &__info{
+  &__info {
     overflow: hidden;
   }
 
@@ -30,11 +31,14 @@ h3,p {
     font-weight: 400;
     font-size: 20px;
     line-height: 28px;
+    max-width: 740px;
+    overflow: hidden;
   }
 
-  &__tag{
+  &__tag {
     display: flex;
-    overflow: scroll;
+    max-width: 740px;
+    overflow: hidden;
   }
 
   &__text {
@@ -45,37 +49,37 @@ h3,p {
     line-height: 22px;
   }
 
-  &__author{
+  &__author {
     display: flex;
     align-items: center;
-    gap:12px;
+    gap: 12px;
 
-    div{
+    div {
       display: flex;
       flex-direction: column;
       align-items: end;
     }
   }
 
-  &__author_username{
+  &__author_username {
     font-family: sans-serif;
     font-size: 18px;
     line-height: 28px;
     letter-spacing: 0em;
-    color:rgba(0, 0, 0, 0.85);
+    color: rgba(0, 0, 0, 0.85);
   }
 
-  &__author_date{
+  &__author_date {
     font-family: sans-serif;
     font-size: 12px;
     line-height: 22px;
     letter-spacing: 0px;
-    color:rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.5);
   }
 
-  &__author_img{
+  &__author_img {
     width: 46px;
     height: 46px;
-    border-radius:50%;
+    border-radius: 50%;
   }
 }

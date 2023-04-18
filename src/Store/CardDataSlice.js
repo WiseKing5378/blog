@@ -2,7 +2,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchData = createAsyncThunk('CardData/fetchData', async (offset) => {
-  const resp = await fetch(`https://blog.kata.academy/api/articles?offset=${offset}`);
+  const resp = await fetch(`https://blog.kata.academy/api/articles?limit=5&offset=${offset}`);
   const data = await resp.json();
 
   return data;
@@ -18,7 +18,7 @@ const CardDataSlice = createSlice({
   },
   reducers: {
     changePage(state, action) {
-      state.offset = action.payload * 20 - 20;
+      state.offset = action.payload * 5 - 5;
     },
   },
   extraReducers: {

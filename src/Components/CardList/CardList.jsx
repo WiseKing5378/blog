@@ -35,8 +35,8 @@ function CardList() {
           dispatch(changePage(e));
           dispatch(fetchData(offset));
         }}
-        current={(offset + 20) / 20}
-        defaultPageSize="20"
+        current={(offset + 5) / 5}
+        defaultPageSize="5"
         hideOnSinglePage
       />
     </ul>
