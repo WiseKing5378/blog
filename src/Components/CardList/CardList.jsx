@@ -1,4 +1,4 @@
-import { Pagination } from 'antd';
+import { Pagination, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import uuid from 'react-uuid';
 
@@ -9,7 +9,7 @@ import style from './CardList.module.scss';
 
 function CardList() {
   const dispatch = useDispatch();
-  const { cardData, articlesCount, offset } = useSelector((state) => state.CardDataSlice);
+  const { cardData, articlesCount, offset, status } = useSelector((state) => state.CardDataSlice);
   const data = cardData.map((i) => {
     const { title, description, body, updatedAt, tagList, author } = i;
     return (
@@ -26,7 +26,8 @@ function CardList() {
   });
   return (
     <ul className={style.card_list}>
-      {data}
+      {status === 'loading' ? <Spin size="large" /> : data}
+
       <Pagination
         defaultCurrent={1}
         total={articlesCount}

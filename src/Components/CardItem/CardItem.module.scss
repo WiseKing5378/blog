@@ -10,7 +10,7 @@ p {
 .card {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
   padding: 15px 20px;
   width: 940px;
   font-family: sans-serif;
@@ -57,7 +57,7 @@ p {
     div {
       display: flex;
       flex-direction: column;
-      align-items: end;
+      align-items: flex-end;
     }
   }
 
