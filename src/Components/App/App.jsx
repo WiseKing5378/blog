@@ -21,7 +21,7 @@ function App() {
       <Routes>
         <Route path="/" Component={CardList} />
         <Route path="/articles" Component={CardList} />
-        <Route path="/login" Component={ModalLogin} />
+        <Route path="/sign-in" Component={ModalLogin} />
       </Routes>
     </BrowserRouter>
   );

@@ -9,7 +9,7 @@ function Header() {
         Realworld Blog
       </Link>
       <div className={style.header__btn_group}>
-        <Link to="/login">
+        <Link to="/sign-in">
           <button type="button" className={style.header__btn}>
             Sign In
           </button>
