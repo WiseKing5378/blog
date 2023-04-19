@@ -15,9 +15,11 @@ function Header() {
           </button>
         </Link>
 
-        <button type="button" className={style.header__btn}>
-          Sign Up
-        </button>
+        <Link to="/sign-up">
+          <button type="button" className={style.header__btn}>
+            Sign Up
+          </button>
+        </Link>
       </div>
     </header>
   );

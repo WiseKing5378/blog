@@ -9,10 +9,10 @@ function ModalLogin() {
       <h3 className={style.login__title}>Sign In</h3>
       <div className={style.login__input}>
         <label htmlFor="email">
-          Email address <input type="email" id="email" placeholder="Email address" />
+          Email address <input type="email" id="email" placeholder="Email address" required />
         </label>
         <label htmlFor="password">
-          Password <input id="password" type="password" placeholder="Password" />
+          Password <input id="password" type="password" placeholder="Password" required />
         </label>
       </div>
       <div className={style.login__footer}>

@@ -6,6 +6,7 @@ import ModalLogin from '../ModalLogin/ModalLogin';
 import Header from '../Header';
 import CardList from '../CardList';
 import { fetchData } from '../../Store/CardDataSlice';
+import SignUp from '../SignUp';
 
 // eslint-disable-next-line no-unused-vars
 import style from './App.module.scss';
@@ -22,6 +23,7 @@ function App() {
         <Route path="/" Component={CardList} />
         <Route path="/articles" Component={CardList} />
         <Route path="/sign-in" Component={ModalLogin} />
+        <Route path="/sign-up" Component={SignUp} />
       </Routes>
     </BrowserRouter>
   );
