@@ -7,7 +7,7 @@ import Header from '../Header';
 import CardList from '../CardList';
 import { fetchData } from '../../Store/CardDataSlice';
 import SignUp from '../SignUp';
-import { registerUser } from '../../Store/Authentication';
+import { loginUser } from '../../Store/Authentication';
 
 // eslint-disable-next-line no-unused-vars
 import style from './App.module.scss';
@@ -17,8 +17,7 @@ function App() {
   useEffect(() => {
     dispatch(fetchData(0));
     dispatch(
-      registerUser({
-        username: 'hrtuygsgfawg',
+      loginUser({
         email: 'jrt@kkl.lkk',
         password: '895jrty',
       })

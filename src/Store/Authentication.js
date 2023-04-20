@@ -13,6 +13,21 @@ export const registerUser = createAsyncThunk('User/registerUser', async (user) =
   });
 
   const data = await resp.json();
+  return data;
+});
+
+export const loginUser = createAsyncThunk('User/loginUser', async (user) => {
+  const resp = await fetch('https://blog.kata.academy/api/users/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    body: JSON.stringify({
+      user,
+    }),
+  });
+
+  const data = await resp.json();
   console.log(data);
   return data;
 });
@@ -33,6 +48,16 @@ const User = createSlice({
       state.user = action.payload.user;
     },
     [registerUser.rejected]: (state) => {
+      state.status = 'error';
+    },
+    [loginUser.pending]: (state) => {
+      state.status = 'loading';
+    },
+    [loginUser.fulfilled]: (state, action) => {
+      state.status = 'ok';
+      state.user = action.payload.user;
+    },
+    [loginUser.rejected]: (state) => {
       state.status = 'error';
     },
   },
