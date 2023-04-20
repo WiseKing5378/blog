@@ -5,7 +5,7 @@ import style from './SignUp.module.scss';
 
 function SignUp() {
   return (
-    <form className={style.login}>
+    <form className={style.login} method="POST">
       <h3 className={style.login__title}>Sign Up</h3>
       <div className={style.login__input}>
         <label htmlFor="username">
