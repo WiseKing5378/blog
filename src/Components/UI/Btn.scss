@@ -1,0 +1,30 @@
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.75);
+  border-radius: 5px;
+  color: rgba(0, 0, 0, 0.75);
+
+  &_large {
+    padding: 10px 16px;
+  }
+
+  &_green {
+    border-color: rgba(82, 196, 26, 1);
+    color: rgba(82, 196, 26, 1);
+  }
+  &_red {
+    border-color: rgba(245, 34, 45, 1);
+    color: rgba(245, 34, 45, 1);
+  }
+  &_blue {
+    border-color: rgba(24, 144, 255, 1);
+    color: rgba(24, 144, 255, 1);
+  }
+  &_borderless {
+    border: none;
+  }
+}
