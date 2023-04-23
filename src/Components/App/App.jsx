@@ -1,15 +1,16 @@
+/* eslint-disable no-unused-vars */
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import ModalLogin from '../ModalLogin/ModalLogin';
+import LoginIn from '../Login';
 import Header from '../Header';
 import CardList from '../CardList';
 import { fetchData } from '../../Store/CardDataSlice';
 import SignUp from '../SignUp';
 // import { getCurrentUser } from '../../Store/Authentication';
+import ProfileEdit from '../ProfileEdit';
 
-// eslint-disable-next-line no-unused-vars
 import style from './App.module.scss';
 
 function App() {
@@ -25,8 +26,9 @@ function App() {
       <Routes>
         <Route path="/" Component={CardList} />
         <Route path="/articles" Component={CardList} />
-        <Route path="/sign-in" Component={ModalLogin} />
+        <Route path="/sign-in" Component={LoginIn} />
         <Route path="/sign-up" Component={SignUp} />
+        <Route path="/profile" Component={ProfileEdit} />
       </Routes>
     </BrowserRouter>
   );

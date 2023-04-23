@@ -23,9 +23,12 @@ function Header() {
             <Link to="/new-article">
               <Btn clas="btn btn_green">Create article</Btn>
             </Link>
-            <Btn clas="btn btn_large btn_borderless">
-              {user.username} <img src={user.image ? user.image : avatar} alt="avatar" />
-            </Btn>
+            <Link to="/profile">
+              <Btn clas="btn btn_large btn_borderless">
+                {user.username} <img src={user.image ? user.image : avatar} alt="avatar" />
+              </Btn>
+            </Link>
+
             <Link to="/" onClick={() => dispatch(logout(false))}>
               <Btn clas="btn btn_large">Log Out</Btn>
             </Link>

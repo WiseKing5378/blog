@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+// qw@htryryryry.jj ghjj
+
 export const registerUser = createAsyncThunk('User/registerUser', async (user) => {
   const resp = await fetch('https://blog.kata.academy/api/users', {
     method: 'POST',
@@ -23,7 +25,7 @@ export const loginUser = createAsyncThunk('User/loginUser', async (user) => {
       'Content-Type': 'application/json;charset=utf-8',
     },
     body: JSON.stringify({
-      user,
+      user: { ...user },
     }),
   });
 
@@ -40,7 +42,6 @@ export const getCurrentUser = createAsyncThunk('User/getCurrentUser', async (tok
     },
   });
   const data = await resp.json();
-  console.log(data);
   return data;
 });
 
@@ -50,10 +51,14 @@ const User = createSlice({
     user: null,
     status: 'loading',
     login: false,
+    formData: null,
   },
   reducers: {
     logout(state, action) {
       state.login = action.payload;
+    },
+    getDataFromForm(state, action) {
+      state.formData = action;
     },
   },
   extraReducers: {
