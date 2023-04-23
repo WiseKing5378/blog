@@ -5,12 +5,14 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import uuid from 'react-uuid';
+import { useEffect, useState } from 'react';
 
 import style from './Form.module.scss';
 
 export default function Form(props) {
   const dispatch = useDispatch();
   const { fn, title, btnText, formType, inputField } = props;
+  const [error, setError] = useState(false);
   const {
     register,
     handleSubmit,
@@ -64,6 +66,16 @@ export default function Form(props) {
     },
   };
 
+  useEffect(() => {
+    const subs = watch((data) => {
+      if (data.password !== data.confirmPassword) {
+        setError(true);
+      } else {
+        setError(false);
+      }
+    });
+  }, [watch]);
+
   const inputs = inputField.map((i) => {
     const { label, name, type } = i;
     let validate;
@@ -71,9 +83,9 @@ export default function Form(props) {
     if (name === 'password' || name === 'confirmPassword') validate = passwordRules;
     if (name === 'email') validate = emailRules;
     return (
-      <label htmlFor={uuid()} key={uuid()} className={style.label}>
+      <label htmlFor={name} key={uuid()} className={style.label}>
         {label}
-        <input type={type} {...register(name, validate)} id={uuid()} className={style.input} placeholder={label} />
+        <input type={type} {...register(name, validate)} id={name} className={style.input} placeholder={label} />
         <div style={{ color: 'rgba(245, 34, 45, 1)' }}>{errors[name] ? <p>{errors[name].message}</p> : null}</div>
       </label>
     );
