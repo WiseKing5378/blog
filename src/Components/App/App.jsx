@@ -8,15 +8,19 @@ import Header from '../Header';
 import CardList from '../CardList';
 import { fetchData } from '../../Store/CardDataSlice';
 import SignUp from '../SignUp';
-// import { getCurrentUser } from '../../Store/Authentication';
+import { getCurrentUser } from '../../Store/Authentication';
 import ProfileEdit from '../ProfileEdit';
+import CreateArticle from '../CreateArticle/CreateArticle';
 
 import style from './App.module.scss';
 
 function App() {
   const dispatch = useDispatch();
   // const { status, user } = useSelector((state) => state.User);
+  const token = JSON.parse(localStorage.getItem('token'));
   useEffect(() => {
+    console.log(token);
+    dispatch(getCurrentUser(token));
     dispatch(fetchData(0));
   }, []);
 
@@ -29,6 +33,7 @@ function App() {
         <Route path="/sign-in" Component={LoginIn} />
         <Route path="/sign-up" Component={SignUp} />
         <Route path="/profile" Component={ProfileEdit} />
+        <Route path="/new-article" Component={CreateArticle} />
       </Routes>
     </BrowserRouter>
   );

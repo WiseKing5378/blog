@@ -25,7 +25,7 @@ function Header() {
             </Link>
             <Link to="/profile">
               <Btn clas="btn btn_large btn_borderless">
-                {user.username} <img src={user.image ? user.image : avatar} alt="avatar" />
+                {user.username} <img className={style.img} src={user.image ? user.image : avatar} alt="avatar" />
               </Btn>
             </Link>
 

@@ -30,6 +30,7 @@ export const loginUser = createAsyncThunk('User/loginUser', async (user) => {
   });
 
   const data = await resp.json();
+
   return data;
 });
 
@@ -38,6 +39,7 @@ export const updateUser = createAsyncThunk('User/updateUser', async (user) => {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
     },
     body: JSON.stringify({
       user: { ...user },
@@ -71,6 +73,7 @@ const User = createSlice({
   reducers: {
     logout(state, action) {
       state.login = action.payload;
+      localStorage.clear();
     },
     getDataFromForm(state, action) {
       state.formData = action;
@@ -93,9 +96,14 @@ const User = createSlice({
     [loginUser.fulfilled]: (state, action) => {
       state.login = true;
       state.user = action.payload.user;
+      localStorage.setItem('token', JSON.stringify(action.payload.user.token));
     },
     [loginUser.rejected]: (state) => {
       state.status = 'error';
+    },
+    [getCurrentUser.fulfilled]: (state, action) => {
+      state.login = true;
+      state.user = action.payload.user;
     },
   },
 });
