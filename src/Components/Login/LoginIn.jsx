@@ -8,10 +8,7 @@ export default function LoginIn() {
       title="Sign In"
       btnText="Login"
       fn={loginUser}
-      inputField={[
-        { label: 'Email address', name: 'email', type: 'email' },
-        { label: 'Password', name: 'password', type: 'password' },
-      ]}
+      inputField={[{ label: 'Email address', name: 'email', type: 'email' }]}
     />
   );
 }

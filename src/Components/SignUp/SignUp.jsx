@@ -11,8 +11,6 @@ export default function SignUp() {
       inputField={[
         { label: 'Username', name: 'username', type: 'text' },
         { label: 'Email address', name: 'email', type: 'email' },
-        { label: 'Password', name: 'password', type: 'password' },
-        { label: 'Repeat password', name: 'confirmPassword', type: 'password' },
       ]}
     />
   );

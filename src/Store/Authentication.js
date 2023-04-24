@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// qw@htryryryry.jj ghjj
+// alexmah@a.ru 111111
 
 export const registerUser = createAsyncThunk('User/registerUser', async (user) => {
   const resp = await fetch('https://blog.kata.academy/api/users', {
@@ -21,6 +21,21 @@ export const registerUser = createAsyncThunk('User/registerUser', async (user) =
 export const loginUser = createAsyncThunk('User/loginUser', async (user) => {
   const resp = await fetch('https://blog.kata.academy/api/users/login', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    body: JSON.stringify({
+      user: { ...user },
+    }),
+  });
+
+  const data = await resp.json();
+  return data;
+});
+
+export const updateUser = createAsyncThunk('User/updateUser', async (user) => {
+  const resp = await fetch('https://blog.kata.academy/api/user', {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },

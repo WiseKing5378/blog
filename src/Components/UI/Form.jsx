@@ -22,6 +22,63 @@ export default function Form(props) {
     mode: 'onBlur',
   });
 
+  const onSubmit = (e) => {
+    delete e.confirmPassword;
+    if (!error) dispatch(fn(e));
+  };
+  const usernameRules = {
+    minLength: {
+      value: 3,
+      message: 'Minimum of 3 characters',
+    },
+    maxLength: { value: 20, message: 'Maximum of 20 characters' },
+  };
+  const passwordRules = {
+    minLength: {
+      value: 6,
+      message: 'Minimum of 6 characters',
+    },
+    maxLength: { value: 40, message: 'Maximum of 40 characters' },
+  };
+  const emailRules = {
+    pattern: {
+      value:
+        /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu,
+      message: 'Email format like be email@em.em',
+    },
+  };
+
+  const password = watch('password');
+  const confirmPassword = watch('confirmPassword');
+
+  useEffect(() => {
+    if (password !== confirmPassword && formType === 'signUp') {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  }, [password, confirmPassword]);
+
+  const inputs = inputField.map((i) => {
+    const { label, name, type } = i;
+    let validate;
+    if (name === 'username') validate = usernameRules;
+    if (name === 'email') validate = emailRules;
+    return (
+      <label htmlFor={name} key={uuid()} className={style.label}>
+        {label}
+        <input
+          type={type}
+          {...register(name, { required: 'Required to fill in', ...validate })}
+          id={name}
+          className={style.input}
+          placeholder={label}
+        />
+        <div style={{ color: 'rgba(245, 34, 45, 1)' }}>{errors[name] ? <p>{errors[name].message}</p> : null}</div>
+      </label>
+    );
+  });
+
   let footer = null;
   if (formType === 'signIn') {
     footer = (
@@ -38,63 +95,47 @@ export default function Form(props) {
     );
   }
 
-  const onSubmit = (e) => {
-    console.log(e);
-  };
-  const usernameRules = {
-    required: 'Required to fill in',
-    minLength: {
-      value: 3,
-      message: 'Minimum of 3 characters',
-    },
-    maxLength: { value: 20, message: 'Maximum of 20 characters' },
-  };
-  const passwordRules = {
-    required: 'Required to fill in',
-    minLength: {
-      value: 6,
-      message: 'Minimum of 6 characters',
-    },
-    maxLength: { value: 40, message: 'Maximum of 40 characters' },
-  };
-  const emailRules = {
-    required: 'Required to fill in',
-    pattern: {
-      value:
-        /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu,
-      message: 'Email format like be email@em.em',
-    },
-  };
-
-  useEffect(() => {
-    const subs = watch((data) => {
-      if (data.password !== data.confirmPassword) {
-        setError(true);
-      } else {
-        setError(false);
-      }
-    });
-  }, [watch]);
-
-  const inputs = inputField.map((i) => {
-    const { label, name, type } = i;
-    let validate;
-    if (name === 'username') validate = usernameRules;
-    if (name === 'password' || name === 'confirmPassword') validate = passwordRules;
-    if (name === 'email') validate = emailRules;
-    return (
-      <label htmlFor={name} key={uuid()} className={style.label}>
-        {label}
-        <input type={type} {...register(name, validate)} id={name} className={style.input} placeholder={label} />
-        <div style={{ color: 'rgba(245, 34, 45, 1)' }}>{errors[name] ? <p>{errors[name].message}</p> : null}</div>
-      </label>
-    );
-  });
-
   return (
     <form className={style.form} onSubmit={handleSubmit(onSubmit)}>
       <h3 className={style.form__title}>{title}</h3>
-      <div className={style.form__input}>{inputs}</div>
+      <div className={style.form__input}>
+        {inputs}
+        {formType === 'signUp' || formType === 'signIn' || formType === 'edit' ? (
+          <label htmlFor="password" className={style.label}>
+            Password
+            <input
+              type="password"
+              {...register('password', { required: 'Required to fill in', ...passwordRules })}
+              id="password"
+              className={style.input}
+              placeholder="Password"
+            />
+            <div style={{ color: 'rgba(245, 34, 45, 1)' }}>
+              {errors.password ? <p>{errors.password.message}</p> : error && <span>Passwords must match</span>}
+            </div>
+          </label>
+        ) : null}
+
+        {formType === 'signUp' ? (
+          <label htmlFor="confirmPassword" className={style.label}>
+            Repeat password
+            <input
+              type="password"
+              {...register('confirmPassword', { required: 'Required to fill in', ...passwordRules })}
+              id="confirmPassword"
+              className={style.input}
+              placeholder="Repeat password"
+            />
+            <div style={{ color: 'rgba(245, 34, 45, 1)' }}>
+              {errors.confirmPassword ? (
+                <p>{errors.confirmPassword.message}</p>
+              ) : (
+                error && <span>Passwords must match</span>
+              )}
+            </div>
+          </label>
+        ) : null}
+      </div>
 
       {formType === 'signUp' ? (
         <label htmlFor="checkbox" className={style.checkbox}>
