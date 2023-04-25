@@ -1,6 +1,7 @@
 .btn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   padding: 6px 12px;
   background: #ffffff;
@@ -26,5 +27,8 @@
   }
   &_borderless {
     border: none;
+  }
+  &_form{
+    
   }
 }

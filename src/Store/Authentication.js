@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// alexmah@a.ru 111111
+// alexmah@a.ru 222222
 
 export const registerUser = createAsyncThunk('User/registerUser', async (user) => {
   const resp = await fetch('https://blog.kata.academy/api/users', {
@@ -65,7 +65,7 @@ export const getCurrentUser = createAsyncThunk('User/getCurrentUser', async (tok
 const User = createSlice({
   name: 'User',
   initialState: {
-    user: null,
+    user: { username: '' },
     status: 'loading',
     login: false,
     formData: null,
