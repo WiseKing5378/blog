@@ -32,7 +32,6 @@
   &__footer {
     display: flex;
     align-self: start;
-    
   }
 
   &__btn {
@@ -50,12 +49,10 @@
     }
   }
 
-  &__tags{
-    
+  &__tags {
     display: flex;
     flex-direction: column;
     gap: 20px;
-   
   }
 }
 

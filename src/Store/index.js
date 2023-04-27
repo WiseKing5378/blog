@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import CardDataSlice from './CardDataSlice';
 import User from './Authentication';
+import Articles from './Articles';
 
 export default configureStore({
   reducer: {
-    CardDataSlice,
     User,
+    Articles,
   },
 });

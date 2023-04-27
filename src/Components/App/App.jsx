@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginIn from '../Login';
 import Header from '../Header';
 import CardList from '../CardList';
-import { fetchData } from '../../Store/CardDataSlice';
+import { fetchData } from '../../Store/Articles';
 import SignUp from '../SignUp';
 import { getCurrentUser } from '../../Store/Authentication';
 import ProfileEdit from '../ProfileEdit';
@@ -16,7 +16,6 @@ import style from './App.module.scss';
 
 function App() {
   const dispatch = useDispatch();
-  // const { status, user } = useSelector((state) => state.User);
   const token = JSON.parse(localStorage.getItem('token'));
   useEffect(() => {
     if (token) dispatch(getCurrentUser(token));

@@ -9,13 +9,15 @@ import Btn from './Btn';
 import style from './ArticleForm.module.scss';
 
 function Tag(props) {
-  const { register, name, fn } = props;
+  const { register, name, fn, tagList } = props;
   return (
-    <div>
+    <div id={name}>
       <input type="text" {...register(`${name}`)} id="tags" className={style.input} placeholder="Tag" />
       <button
         onClick={(e) => {
-          console.log(e.target.parentElement);
+          console.log(tagList[0].key);
+          fn(tagList.filter((i) => i.key !== e.target.parentElement.id));
+          console.log(e.target.parentElement.name);
         }}
         type="button"
         style={{ width: '80px' }}
@@ -40,7 +42,6 @@ export default function ArticleForm(props) {
   });
 
   const [tagList, setTagList] = useState([]);
-  let tagName = 1;
 
   const onSubmit = (e) => {
     const res = Object.entries(e).reduce(
@@ -105,8 +106,10 @@ export default function ArticleForm(props) {
             <button
               type="button"
               onClick={() => {
-                tagName += 1;
-                setTagList(tagList.concat(<Tag register={register} name={uuid()} key={uuid()} fn={setTagList} />));
+                const id = uuid();
+                setTagList(
+                  tagList.concat(<Tag register={register} name={id} key={id} fn={setTagList} tagList={tagList} />)
+                );
                 console.log(tagList);
               }}
             >
