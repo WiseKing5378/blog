@@ -2,23 +2,27 @@
 import { Space, Tag } from 'antd';
 import uuid from 'react-uuid';
 import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
 
 import avt from '../../Assets/avatar.png';
 
 import style from './CardItem.module.scss';
 
 function CardItem(props) {
-  const { title, description, body, updatedAt, tagList, author } = props;
+  const { title, description, updatedAt, tagList, author, slug } = props;
   const tags = tagList.map((i) => <Tag key={uuid()}>{i}</Tag>);
+
   return (
     <li className={style.card}>
       <div className={style.card__info}>
-        <h3 className={style.card__title}>{title}</h3>
+        <Link to={`/articles/${slug}`}>
+          <h3 className={style.card__title}>{title}</h3>
+        </Link>
+
         <Space size={[0, 8]} wrap className={style.card__tag}>
           {tags}
         </Space>
         <p className={style.card__text}>{description}</p>
-        {/* <div className={style.card__article}>{body}</div> */}
       </div>
       <div className={style.card__author}>
         <div>

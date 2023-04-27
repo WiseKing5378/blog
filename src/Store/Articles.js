@@ -51,6 +51,14 @@ const Articles = createSlice({
     articlesCount: 0,
     status: 'loading',
     offset: 0,
+    currentArticle: {
+      title: '',
+      description: '',
+      tagList: [],
+      updatedAt: new Date(),
+      body: '',
+      author: { username: '' },
+    },
   },
   reducers: {
     changePage(state, action) {
@@ -68,6 +76,14 @@ const Articles = createSlice({
     },
     [fetchData.rejected]: (state) => {
       state.status = 'error';
+    },
+
+    [getArticle.pending]: (state, action) => {
+      state.status = 'loading';
+    },
+    [getArticle.fulfilled]: (state, action) => {
+      state.currentArticle = action.payload.article;
+      state.status = 'ok';
     },
   },
 });

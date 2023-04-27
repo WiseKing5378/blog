@@ -11,6 +11,7 @@ import SignUp from '../SignUp';
 import { getCurrentUser } from '../../Store/Authentication';
 import ProfileEdit from '../ProfileEdit';
 import CreateArticle from '../CreateArticle/CreateArticle';
+import Article from '../Article/Article';
 
 import style from './App.module.scss';
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="/sign-up" Component={SignUp} />
         <Route path="/profile" Component={ProfileEdit} />
         <Route path="/new-article" Component={CreateArticle} />
+        <Route path="/articles/:id" Component={Article} />
       </Routes>
     </BrowserRouter>
   );
