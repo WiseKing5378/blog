@@ -5,8 +5,6 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { fetchData } from '../../Store/Articles';
-
 import style from './ArticleForm.module.scss';
 
 export default function ArticleForm(props) {
@@ -33,7 +31,6 @@ export default function ArticleForm(props) {
     if (formType === 'edit') dispatch(fn({ article: { ...e }, slug: currentArticle.slug }));
     dispatch(fn(e));
     if (status === 'ok') {
-      dispatch(fetchData(0));
       navigate(`/articles/${currentArticle.slug}`, { replace: true });
     }
   };

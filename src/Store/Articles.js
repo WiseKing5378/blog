@@ -101,6 +101,10 @@ const Articles = createSlice({
       state.currentArticle = action.payload.article;
       state.status = 'ok';
     },
+    [updateArticle.fulfilled]: (state, action) => {
+      state.currentArticle = action.payload.article;
+      state.status = 'ok';
+    },
   },
 });
 export const { changePage } = Articles.actions;
