@@ -1,37 +1,49 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 // alexmah@a.ru 222222
 
 export const registerUser = createAsyncThunk('User/registerUser', async (user) => {
-  const resp = await fetch('https://blog.kata.academy/api/users', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8',
-    },
-    body: JSON.stringify({
-      user,
-    }),
-  });
-
-  const data = await resp.json();
-  return data;
+  try {
+    const resp = await fetch('https://blog.kata.academy/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify({
+        user,
+      }),
+    });
+    if (resp.status !== 200) {
+      throw new Error();
+    }
+    const data = await resp.json();
+    return data;
+  } catch (error) {
+    throw new Error();
+  }
 });
 
 export const loginUser = createAsyncThunk('User/loginUser', async (user) => {
-  const resp = await fetch('https://blog.kata.academy/api/users/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8',
-    },
-    body: JSON.stringify({
-      user: { ...user },
-    }),
-  });
-
-  const data = await resp.json();
-
-  return data;
+  try {
+    const resp = await fetch('https://blog.kata.academy/api/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify({
+        user: { ...user },
+      }),
+    });
+    if (resp.status !== 200) {
+      throw new Error();
+    }
+    const data = await resp.json();
+    return data;
+  } catch (error) {
+    throw new Error();
+  }
 });
 
 export const updateUser = createAsyncThunk('User/updateUser', async (user) => {
@@ -73,10 +85,14 @@ const User = createSlice({
   reducers: {
     logout(state, action) {
       state.login = action.payload;
+      state.status = '';
       localStorage.clear();
     },
     getDataFromForm(state, action) {
       state.formData = action;
+    },
+    restoreStatus(state) {
+      state.status = '';
     },
   },
   extraReducers: {
@@ -97,6 +113,7 @@ const User = createSlice({
       state.login = true;
       state.user = action.payload.user;
       localStorage.setItem('token', JSON.stringify(action.payload.user.token));
+      state.status = 'ok';
     },
     [loginUser.rejected]: (state) => {
       state.status = 'error';
@@ -104,8 +121,13 @@ const User = createSlice({
     [getCurrentUser.fulfilled]: (state, action) => {
       state.login = true;
       state.user = action.payload.user;
+      state.status = 'ok';
+    },
+
+    [updateUser.rejected]: (state) => {
+      state.status = 'error';
     },
   },
 });
-export const { logout } = User.actions;
+export const { logout, restoreStatus } = User.actions;
 export default User.reducer;

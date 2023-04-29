@@ -10,8 +10,10 @@ import { fetchData } from '../../Store/Articles';
 import SignUp from '../SignUp';
 import { getCurrentUser } from '../../Store/Authentication';
 import ProfileEdit from '../ProfileEdit';
-import CreateArticle from '../CreateArticle/CreateArticle';
+import CreateArticle from '../Article/CreateArticle';
+import EditArticle from '../Article/EditArticle';
 import Article from '../Article/Article';
+import SuccessPage from '../UI/SuccessPage';
 
 import style from './App.module.scss';
 
@@ -34,7 +36,9 @@ function App() {
         <Route path="/sign-up" Component={SignUp} />
         <Route path="/profile" Component={ProfileEdit} />
         <Route path="/new-article" Component={CreateArticle} />
+        <Route path="/articles/:id/edit" Component={EditArticle} />
         <Route path="/articles/:id" Component={Article} />
+        <Route path="/success" Component={SuccessPage} />
       </Routes>
     </BrowserRouter>
   );

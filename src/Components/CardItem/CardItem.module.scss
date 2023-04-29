@@ -78,6 +78,7 @@ p {
   }
 
   &__author_img {
+    object-fit: cover;
     width: 46px;
     height: 46px;
     border-radius: 50%;

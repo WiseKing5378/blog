@@ -1,62 +1,41 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-unused-vars */
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import uuid from 'react-uuid';
 
-import Btn from './Btn';
+import { useForm, useFieldArray } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import { fetchData } from '../../Store/Articles';
+
 import style from './ArticleForm.module.scss';
 
-function Tag(props) {
-  const { register, name, fn, tagList } = props;
-  return (
-    <div id={name}>
-      <input type="text" {...register(`${name}`)} id="tags" className={style.input} placeholder="Tag" />
-      <button
-        onClick={(e) => {
-          console.log(tagList[0].key);
-          fn(tagList.filter((i) => i.key !== e.target.parentElement.id));
-          console.log(e.target.parentElement.name);
-        }}
-        type="button"
-        style={{ width: '80px' }}
-        className='"btn btn_large btn_red"'
-      >
-        Delete
-      </button>
-    </div>
-  );
-}
-
 export default function ArticleForm(props) {
-  const { title } = props;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { title, fn, formType } = props;
+  const { status, currentArticle } = useSelector((state) => state.Articles);
 
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     formState: { errors, isValid },
   } = useForm({
     mode: 'onBlur',
+    defaultValues: { tagList: formType === 'edit' ? currentArticle.tagList : [] },
+  });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'tagList',
   });
 
-  const [tagList, setTagList] = useState([]);
-
   const onSubmit = (e) => {
-    const res = Object.entries(e).reduce(
-      (acc, i) => {
-        if (i[0] === 'title' || i[0] === 'description' || i[0] === 'text') {
-          acc[i[0]] = i[1];
-        } else if (i[1]) {
-          acc.tags = [...acc.tags, i[1]];
-        }
-        return acc;
-      },
-      { tags: [] }
-    );
-
-    console.log(res);
+    if (formType === 'edit') dispatch(fn({ article: { ...e }, slug: currentArticle.slug }));
+    dispatch(fn(e));
+    if (status === 'ok') {
+      dispatch(fetchData(0));
+      navigate(`/articles/${currentArticle.slug}`, { replace: true });
+    }
   };
 
   return (
@@ -66,6 +45,7 @@ export default function ArticleForm(props) {
         <label htmlFor="title" className={style.label}>
           Title
           <input
+            defaultValue={formType === 'edit' ? currentArticle.title : null}
             type="text"
             {...register('title', { required: 'Required to fill in' })}
             id="title"
@@ -77,6 +57,7 @@ export default function ArticleForm(props) {
         <label htmlFor="description" className={style.label}>
           Short description
           <input
+            defaultValue={formType === 'edit' ? currentArticle.description : null}
             type="text"
             {...register('description', { required: 'Required to fill in' })}
             id="description"
@@ -87,37 +68,43 @@ export default function ArticleForm(props) {
             {errors.description ? <p>{errors.description.message}</p> : null}
           </div>
         </label>
-        <label htmlFor="text" className={style.label}>
+        <label htmlFor="body" className={style.label}>
           Text
           <textarea
-            {...register('text', { required: 'Required to fill in' })}
-            id="text"
+            defaultValue={formType === 'edit' ? currentArticle.body : null}
+            {...register('body', { required: 'Required to fill in' })}
+            id="body"
             style={{ height: '186px', resize: 'none' }}
             className={style.input}
             placeholder="Text"
           />
-          <div style={{ color: 'rgba(245, 34, 45, 1)' }}>{errors.text ? <p>{errors.text.message}</p> : null}</div>
+          <div style={{ color: 'rgba(245, 34, 45, 1)' }}>{errors.body ? <p>{errors.body.message}</p> : null}</div>
         </label>
 
-        <label htmlFor="tags" className={style.label}>
-          Tags
-          <div className={style.form__tags}>
-            {tagList}
-            <button
-              type="button"
-              onClick={() => {
-                const id = uuid();
-                setTagList(
-                  tagList.concat(<Tag register={register} name={id} key={id} fn={setTagList} tagList={tagList} />)
-                );
-                console.log(tagList);
-              }}
-            >
-              btn
-            </button>
-            {/* <Btn clas="btn btn_large btn_blue">Add</Btn> */}
-          </div>
-        </label>
+        <div className={style.form__tagList}>
+          <ul>
+            {fields.map((item, index) => (
+              <li key={item.id} className={style.form__tag}>
+                <input
+                  className={style.input}
+                  placeholder="Tag"
+                  {...register(`tagList.${index}`, { required: true })}
+                />
+
+                <button className={`${style.btn} ${style.btn_red}`} type="button" onClick={() => remove(index)}>
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
+          <button
+            className={`${style.btn} ${style.btn_blue} ${style.btn_bottom}`}
+            type="button"
+            onClick={() => append()}
+          >
+            Add tag
+          </button>
+        </div>
       </div>
 
       <div className={style.form__footer}>

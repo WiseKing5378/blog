@@ -43,6 +43,17 @@ export const updateArticle = createAsyncThunk('Articles/updateArticle', async (o
   const data = await resp.json();
   return data;
 });
+export const deleteArticle = createAsyncThunk('Articles/deleteArticle', async (slug) => {
+  const resp = await fetch(`https://blog.kata.academy/api/articles/${slug}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+    },
+  });
+  const data = await resp.json();
+  return data;
+});
 
 const Articles = createSlice({
   name: 'Articles',
@@ -55,7 +66,7 @@ const Articles = createSlice({
       title: '',
       description: '',
       tagList: [],
-      updatedAt: new Date(),
+      updatedAt: new Date().toString(),
       body: '',
       author: { username: '' },
     },
@@ -82,6 +93,11 @@ const Articles = createSlice({
       state.status = 'loading';
     },
     [getArticle.fulfilled]: (state, action) => {
+      state.currentArticle = action.payload.article;
+      state.status = 'ok';
+    },
+
+    [createArticle.fulfilled]: (state, action) => {
       state.currentArticle = action.payload.article;
       state.status = 'ok';
     },

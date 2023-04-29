@@ -10,6 +10,7 @@ import style from './CardList.module.scss';
 function CardList() {
   const dispatch = useDispatch();
   const { cardData, articlesCount, offset, status } = useSelector((state) => state.Articles);
+
   const data = cardData.map((i) => {
     const { title, description, updatedAt, tagList, author, slug } = i;
     return (

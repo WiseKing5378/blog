@@ -1,18 +1,27 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/destructuring-assignment */
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import uuid from 'react-uuid';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 import style from './Form.module.scss';
 
 export default function Form(props) {
   const dispatch = useDispatch();
-  const { fn, title, btnText, formType, inputField } = props;
+  const { fn, title, btnText, formType } = props;
+  const { status, user } = useSelector((state) => state.User);
+  const navigate = useNavigate();
+
   const [error, setError] = useState(false);
+  useEffect(() => {
+    if (status === 'ok') {
+      navigate('/', { replace: true });
+    }
+    if (status === 'error' && formType === 'signIn') setError('Invalid email or password');
+    if (status === 'error' && formType === 'signUp') setError('An account with such data already exists');
+  }, [status]);
   const {
     register,
     handleSubmit,
@@ -26,6 +35,19 @@ export default function Form(props) {
     delete e.confirmPassword;
     if (!error) dispatch(fn(e));
   };
+
+  const password = watch('password');
+  const confirmPassword = watch('confirmPassword');
+  const email = watch('email');
+
+  useEffect(() => {
+    if (password !== confirmPassword && formType === 'signUp') {
+      setError('Passwords must match');
+    } else {
+      setError('');
+    }
+  }, [password, confirmPassword, email]);
+
   const usernameRules = {
     minLength: {
       value: 3,
@@ -47,37 +69,12 @@ export default function Form(props) {
       message: 'Email format like be email@em.em',
     },
   };
-
-  const password = watch('password');
-  const confirmPassword = watch('confirmPassword');
-
-  useEffect(() => {
-    if (password !== confirmPassword && formType === 'signUp') {
-      setError(true);
-    } else {
-      setError(false);
-    }
-  }, [password, confirmPassword]);
-
-  const inputs = inputField.map((i) => {
-    const { label, name, type } = i;
-    let validate;
-    if (name === 'username') validate = usernameRules;
-    if (name === 'email') validate = emailRules;
-    return (
-      <label htmlFor={name} key={uuid()} className={style.label}>
-        {label}
-        <input
-          type={type}
-          {...register(name, { required: 'Required to fill in', ...validate })}
-          id={name}
-          className={style.input}
-          placeholder={label}
-        />
-        <div style={{ color: 'rgba(245, 34, 45, 1)' }}>{errors[name] ? <p>{errors[name].message}</p> : null}</div>
-      </label>
-    );
-  });
+  const urlRules = {
+    pattern: {
+      value: /^(ftp|http|https):\/\/[^ "]+$/,
+      message: 'Enter correct url',
+    },
+  };
 
   let footer = null;
   if (formType === 'signIn') {
@@ -99,22 +96,65 @@ export default function Form(props) {
     <form className={style.form} onSubmit={handleSubmit(onSubmit)}>
       <h3 className={style.form__title}>{title}</h3>
       <div className={style.form__input}>
-        {inputs}
-        {formType === 'signUp' || formType === 'signIn' || formType === 'edit' ? (
-          <label htmlFor="password" className={style.label}>
-            Password
+        <div style={{ color: 'rgba(245, 34, 45, 1)' }}>{status === 'error' && error}</div>
+
+        <label htmlFor="email" className={style.label}>
+          Email address
+          <input
+            defaultValue={formType === 'edit' ? user.email : null}
+            type="email"
+            {...register('email', { required: 'Required to fill in', ...emailRules })}
+            id="email"
+            className={style.input}
+            placeholder="Email address"
+          />
+          <div style={{ color: 'rgba(245, 34, 45, 1)' }}>{errors.email ? <p>{errors.email.message}</p> : null}</div>
+        </label>
+
+        {formType === 'signUp' || formType === 'edit' ? (
+          <label htmlFor="username" className={style.label}>
+            Username
             <input
-              type="password"
-              {...register('password', { required: 'Required to fill in', ...passwordRules })}
-              id="password"
+              defaultValue={formType === 'edit' ? user.username : null}
+              type="text"
+              {...register('username', { required: 'Required to fill in', ...usernameRules })}
+              id="username"
               className={style.input}
-              placeholder="Password"
+              placeholder="Username"
             />
             <div style={{ color: 'rgba(245, 34, 45, 1)' }}>
-              {errors.password ? <p>{errors.password.message}</p> : error && <span>Passwords must match</span>}
+              {errors.username ? <p>{errors.username.message}</p> : null}
             </div>
           </label>
         ) : null}
+
+        {formType === 'edit' ? (
+          <label htmlFor="image" className={style.label}>
+            Avatar image (url)
+            <input
+              type="url"
+              {...register('image', { required: 'Required to fill in', ...urlRules })}
+              id="image"
+              className={style.input}
+              placeholder="Avatar image (url)"
+            />
+            <div style={{ color: 'rgba(245, 34, 45, 1)' }}>{errors.image ? <p>{errors.image.message}</p> : null}</div>
+          </label>
+        ) : null}
+
+        <label htmlFor="password" className={style.label}>
+          Password
+          <input
+            type="password"
+            {...register('password', { required: 'Required to fill in', ...passwordRules })}
+            id="password"
+            className={style.input}
+            placeholder="Password"
+          />
+          <div style={{ color: 'rgba(245, 34, 45, 1)' }}>
+            {errors.password ? <p>{errors.password.message}</p> : status !== 'error' && error}
+          </div>
+        </label>
 
         {formType === 'signUp' ? (
           <label htmlFor="confirmPassword" className={style.label}>
@@ -127,22 +167,18 @@ export default function Form(props) {
               placeholder="Repeat password"
             />
             <div style={{ color: 'rgba(245, 34, 45, 1)' }}>
-              {errors.confirmPassword ? (
-                <p>{errors.confirmPassword.message}</p>
-              ) : (
-                error && <span>Passwords must match</span>
-              )}
+              {errors.confirmPassword ? <p>{errors.confirmPassword.message}</p> : status !== 'error' && error}
             </div>
           </label>
         ) : null}
-      </div>
 
-      {formType === 'signUp' ? (
-        <label htmlFor="checkbox" className={style.checkbox}>
-          <input type="checkbox" name="checkbox" id="checkbox" required /> I agree to the processing of my personal
-          information
-        </label>
-      ) : null}
+        {formType === 'signUp' ? (
+          <label htmlFor="checkbox" className={style.checkbox}>
+            <input type="checkbox" name="checkbox" id="checkbox" required /> I agree to the processing of my personal
+            information
+          </label>
+        ) : null}
+      </div>
 
       <div className={style.form__footer}>
         <button type="submit" className={style.form__btn} disabled={!isValid}>
