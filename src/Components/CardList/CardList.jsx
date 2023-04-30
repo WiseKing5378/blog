@@ -36,7 +36,7 @@ function CardList() {
         showSizeChanger=""
         onChange={(e) => {
           dispatch(changePage(e));
-          dispatch(fetchData(offset));
+          dispatch(fetchData(e * 5 - 5));
         }}
         current={(offset + 5) / 5}
         defaultPageSize="5"

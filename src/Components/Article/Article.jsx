@@ -21,9 +21,9 @@ function Article() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { user } = useSelector((state) => state.User);
+  const { user, login } = useSelector((state) => state.User);
   const { currentArticle, status } = useSelector((state) => state.Articles);
-  const { title, description, author, tagList, updatedAt, body, favoritesCount, favorited } = currentArticle;
+  const { title, description, author, tagList, updatedAt, body } = currentArticle;
 
   const [likesCount, setLikesCount] = useState(location.state?.favoritesCount);
   const [liked, setLiked] = useState(location.state?.favorited);
@@ -44,6 +44,7 @@ function Article() {
             <div className={style.card__title_sec}>
               <h3 className={style.card__title}>{title}</h3>
               <button
+                disabled={!login}
                 onClick={() => {
                   if (liked) {
                     setLikesCount(likesCount - 1);
@@ -70,14 +71,17 @@ function Article() {
               <ReactMarkdown>{body}</ReactMarkdown>
             </div>
           </div>
-          <div className={style.card__author}>
-            <div>
-              <p className={style.card__author_username}>{author.username}</p>
-              <span className={style.card__author_date}>{format(new Date(updatedAt), 'PP')}</span>
+          <div className={style.card__author_sec}>
+            <div className={style.card__author}>
+              <div>
+                <p className={style.card__author_username}>{author.username}</p>
+                <span className={style.card__author_date}>{format(new Date(updatedAt), 'PP')}</span>
+              </div>
+              <img className={style.card__author_img} src={author.image ? author.image : avt} alt="avatar" />
             </div>
-            <img className={style.card__author_img} src={author.image ? author.image : avt} alt="avatar" />
+
             {user.username === author.username ? (
-              <>
+              <div className={style.card__author_btn}>
                 <Popconfirm
                   title="Delete the task"
                   description="Are you sure to delete this article?"
@@ -98,7 +102,7 @@ function Article() {
                 >
                   Edit
                 </button>
-              </>
+              </div>
             ) : null}
           </div>
         </>

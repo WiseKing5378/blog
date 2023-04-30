@@ -4,7 +4,7 @@ import uuid from 'react-uuid';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { likeArticle, dislikeArticle, getArticle } from '../../Store/Articles';
 import like from '../../Assets/like.png';
@@ -14,6 +14,7 @@ import avt from '../../Assets/avatar.png';
 import style from './CardItem.module.scss';
 
 function CardItem(props) {
+  const { login } = useSelector((state) => state.User);
   const { title, description, updatedAt, tagList, author, slug, favoritesCount, favorited } = props;
   const tags = tagList.map((i) => <Tag key={uuid()}>{i}</Tag>);
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ function CardItem(props) {
             <h3 className={style.card__title}>{title}</h3>
           </Link>
           <button
+            disabled={!login}
             onClick={() => {
               if (liked) {
                 setLikesCount(likesCount - 1);

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import avatar from '../../Assets/avatar.png';
 import { logout, restoreStatus } from '../../Store/Authentication';
 import Btn from '../UI/Btn';
-import { fetchData } from '../../Store/Articles';
+import { fetchData, changePage } from '../../Store/Articles';
 
 import style from './Header.module.scss';
 
@@ -18,6 +18,7 @@ function Header() {
         to="/articles"
         onClick={() => {
           dispatch(fetchData(0));
+          dispatch(changePage(1));
         }}
         className={style.header__title}
       >
