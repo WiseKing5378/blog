@@ -1,30 +1,37 @@
 /* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-unused-vars
-import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
 import { Space, Tag, Spin, Popconfirm } from 'antd';
 import uuid from 'react-uuid';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 
+import { likeArticle, dislikeArticle, getArticle, deleteArticle } from '../../Store/Articles';
+import like from '../../Assets/like.png';
+import dislike from '../../Assets/dislike.png';
 import avt from '../../Assets/avatar.png';
-import { getArticle, deleteArticle } from '../../Store/Articles';
 
 import style from './Article.module.scss';
 
 function Article() {
-  const { currentArticle, status } = useSelector((state) => state.Articles);
-  const { user } = useSelector((state) => state.User);
   const { id } = useParams();
-  const navigate = useNavigate();
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const { user } = useSelector((state) => state.User);
+  const { currentArticle, status } = useSelector((state) => state.Articles);
+  const { title, description, author, tagList, updatedAt, body, favoritesCount, favorited } = currentArticle;
+
+  const [likesCount, setLikesCount] = useState(location.state?.favoritesCount);
+  const [liked, setLiked] = useState(location.state?.favorited);
+
   useEffect(() => {
     dispatch(getArticle(id));
   }, []);
 
-  const { title, description, author, tagList, updatedAt, body } = currentArticle;
   const tags = tagList.map((i) => <Tag key={uuid()}>{i}</Tag>);
 
   return (
@@ -34,7 +41,27 @@ function Article() {
       ) : (
         <>
           <div className={style.card__info}>
-            <h3 className={style.card__title}>{title}</h3>
+            <div className={style.card__title_sec}>
+              <h3 className={style.card__title}>{title}</h3>
+              <button
+                onClick={() => {
+                  if (liked) {
+                    setLikesCount(likesCount - 1);
+                    dispatch(dislikeArticle(id));
+                  } else {
+                    setLikesCount(likesCount + 1);
+                    dispatch(likeArticle(id));
+                  }
+                  setLiked(!liked);
+                }}
+                className={style.btn_like}
+                type="button"
+              >
+                <img src={liked ? like : dislike} alt="like" />
+                {likesCount}
+              </button>
+            </div>
+
             <Space size={[0, 8]} wrap className={style.card__tag}>
               {tags}
             </Space>

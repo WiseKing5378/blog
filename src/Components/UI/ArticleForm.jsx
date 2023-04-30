@@ -4,6 +4,7 @@
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import style from './ArticleForm.module.scss';
 
@@ -27,12 +28,15 @@ export default function ArticleForm(props) {
     name: 'tagList',
   });
 
+  useEffect(() => {
+    if (status === 'create') {
+      navigate('/success', { replace: true });
+    }
+  }, [status]);
+
   const onSubmit = (e) => {
     if (formType === 'edit') dispatch(fn({ article: { ...e }, slug: currentArticle.slug }));
     dispatch(fn(e));
-    if (status === 'ok') {
-      navigate(`/articles/${currentArticle.slug}`, { replace: true });
-    }
   };
 
   return (

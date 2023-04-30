@@ -26,6 +26,12 @@ p {
     overflow: hidden;
   }
 
+  &__title_sec{
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
   &__title {
     color: rgba(24, 144, 255, 1);
     font-weight: 400;
@@ -83,4 +89,13 @@ p {
     height: 46px;
     border-radius: 50%;
   }
+}
+
+.btn_like{
+  border:none;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
 }

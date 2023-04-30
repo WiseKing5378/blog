@@ -3,21 +3,55 @@ import { Space, Tag } from 'antd';
 import uuid from 'react-uuid';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
+import { likeArticle, dislikeArticle, getArticle } from '../../Store/Articles';
+import like from '../../Assets/like.png';
+import dislike from '../../Assets/dislike.png';
 import avt from '../../Assets/avatar.png';
 
 import style from './CardItem.module.scss';
 
 function CardItem(props) {
-  const { title, description, updatedAt, tagList, author, slug } = props;
+  const { title, description, updatedAt, tagList, author, slug, favoritesCount, favorited } = props;
   const tags = tagList.map((i) => <Tag key={uuid()}>{i}</Tag>);
+  const dispatch = useDispatch();
+
+  const [likesCount, setLikesCount] = useState(favoritesCount);
+  const [liked, setLiked] = useState(favorited);
 
   return (
     <li className={style.card}>
       <div className={style.card__info}>
-        <Link to={`/articles/${slug}`}>
-          <h3 className={style.card__title}>{title}</h3>
-        </Link>
+        <div className={style.card__title_sec}>
+          <Link
+            onClick={() => {
+              dispatch(getArticle(slug));
+            }}
+            state={{ favoritesCount: likesCount, favorited: liked }}
+            to={`/articles/${slug}`}
+          >
+            <h3 className={style.card__title}>{title}</h3>
+          </Link>
+          <button
+            onClick={() => {
+              if (liked) {
+                setLikesCount(likesCount - 1);
+                dispatch(dislikeArticle(slug));
+              } else {
+                setLikesCount(likesCount + 1);
+                dispatch(likeArticle(slug));
+              }
+              setLiked(!liked);
+            }}
+            className={style.btn_like}
+            type="button"
+          >
+            <img src={liked ? like : dislike} alt="like" />
+            {likesCount}
+          </button>
+        </div>
 
         <Space size={[0, 8]} wrap className={style.card__tag}>
           {tags}

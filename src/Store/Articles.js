@@ -3,14 +3,25 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchData = createAsyncThunk('Articles/fetchData', async (offset) => {
-  const resp = await fetch(`https://blog.kata.academy/api/articles?limit=5&offset=${offset}`);
+  const resp = await fetch(`https://blog.kata.academy/api/articles?limit=5&offset=${offset}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+    },
+  });
   const data = await resp.json();
-
   return data;
 });
 
 export const getArticle = createAsyncThunk('Articles/getArticle', async (slug) => {
-  const resp = await fetch(`https://blog.kata.academy/api/articles/${slug}`);
+  const resp = await fetch(`https://blog.kata.academy/api/articles/${slug}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+    },
+  });
   const data = await resp.json();
   return data;
 });
@@ -45,6 +56,28 @@ export const updateArticle = createAsyncThunk('Articles/updateArticle', async (o
 });
 export const deleteArticle = createAsyncThunk('Articles/deleteArticle', async (slug) => {
   const resp = await fetch(`https://blog.kata.academy/api/articles/${slug}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+    },
+  });
+  const data = await resp.json();
+  return data;
+});
+export const likeArticle = createAsyncThunk('Articles/deleteArticle', async (slug) => {
+  const resp = await fetch(`https://blog.kata.academy/api/articles/${slug}/favorite`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`,
+    },
+  });
+  const data = await resp.json();
+  return data;
+});
+export const dislikeArticle = createAsyncThunk('Articles/deleteArticle', async (slug) => {
+  const resp = await fetch(`https://blog.kata.academy/api/articles/${slug}/favorite`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
@@ -99,11 +132,11 @@ const Articles = createSlice({
 
     [createArticle.fulfilled]: (state, action) => {
       state.currentArticle = action.payload.article;
-      state.status = 'ok';
+      state.status = 'create';
     },
     [updateArticle.fulfilled]: (state, action) => {
       state.currentArticle = action.payload.article;
-      state.status = 'ok';
+      state.status = 'create';
     },
   },
 });
