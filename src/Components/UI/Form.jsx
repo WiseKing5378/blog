@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import PropTypes from 'prop-types';
 
 import style from './Form.module.scss';
 
-export default function Form(props) {
+function Form(props) {
   const dispatch = useDispatch();
   const { fn, title, btnText, formType } = props;
   const { status, user } = useSelector((state) => state.User);
@@ -189,3 +190,13 @@ export default function Form(props) {
     </form>
   );
 }
+
+Form.propTypes = {
+  fn: PropTypes.func,
+  title: PropTypes.string,
+  btnText: PropTypes.string,
+  formType: PropTypes.string,
+};
+Form.defaultProps = { fn: () => {}, title: '', btnText: '', formType: '' };
+
+export default Form;

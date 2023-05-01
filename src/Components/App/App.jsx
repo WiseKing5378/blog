@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -15,7 +14,7 @@ import EditArticle from '../Article/EditArticle';
 import Article from '../Article/Article';
 import SuccessPage from '../UI/SuccessPage';
 
-import style from './App.module.scss';
+import './App.scss';
 
 function App() {
   const dispatch = useDispatch();

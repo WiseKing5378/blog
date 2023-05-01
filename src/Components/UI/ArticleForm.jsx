@@ -5,10 +5,11 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import style from './ArticleForm.module.scss';
 
-export default function ArticleForm(props) {
+function ArticleForm(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { title, fn, formType } = props;
@@ -116,3 +117,12 @@ export default function ArticleForm(props) {
     </form>
   );
 }
+
+ArticleForm.propTypes = {
+  title: PropTypes.string,
+  fn: PropTypes.func,
+  formType: PropTypes.string,
+};
+ArticleForm.defaultProps = { title: '', fn: () => {}, formType: '' };
+
+export default ArticleForm;

@@ -1,8 +1,8 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/destructuring-assignment */
 import './Btn.scss';
+import PropTypes from 'prop-types';
 
-export default function Btn(props) {
+function Btn(props) {
   const { clas } = props;
   return (
     <button type="button" className={clas}>
@@ -10,3 +10,8 @@ export default function Btn(props) {
     </button>
   );
 }
+Btn.propTypes = {
+  clas: PropTypes.string,
+};
+Btn.defaultProps = { clas: '' };
+export default Btn;

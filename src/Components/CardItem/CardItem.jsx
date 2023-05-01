@@ -1,10 +1,10 @@
-/* eslint-disable no-unused-vars */
 import { Space, Tag } from 'antd';
 import uuid from 'react-uuid';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { likeArticle, dislikeArticle, getArticle } from '../../Store/Articles';
 import like from '../../Assets/like.png';
@@ -70,5 +70,25 @@ function CardItem(props) {
     </li>
   );
 }
+CardItem.defaultProps = {
+  title: '',
+  description: '',
+  updatedAt: '',
+  author: '',
+  slug: '',
+  favoritesCount: 0,
+  favorited: false,
+  tagList: [],
+};
+CardItem.propTypes = {
+  title: PropTypes.string,
+  description: PropTypes.string,
+  updatedAt: PropTypes.string,
+  tagList: PropTypes.arrayOf(PropTypes.string),
+  author: PropTypes.string,
+  slug: PropTypes.string,
+  favoritesCount: PropTypes.number,
+  favorited: PropTypes.bool,
+};
 
 export default CardItem;

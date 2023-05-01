@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-// eslint-disable-next-line no-unused-vars
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
