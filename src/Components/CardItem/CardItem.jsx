@@ -22,6 +22,17 @@ function CardItem(props) {
   const [likesCount, setLikesCount] = useState(favoritesCount);
   const [liked, setLiked] = useState(favorited);
 
+  function changeLike() {
+    if (liked) {
+      setLikesCount(likesCount - 1);
+      dispatch(dislikeArticle(slug));
+    } else {
+      setLikesCount(likesCount + 1);
+      dispatch(likeArticle(slug));
+    }
+    setLiked(!liked);
+  }
+
   return (
     <li className={style.card}>
       <div className={style.card__info}>
@@ -35,21 +46,7 @@ function CardItem(props) {
           >
             <h3 className={style.card__title}>{title}</h3>
           </Link>
-          <button
-            disabled={!login}
-            onClick={() => {
-              if (liked) {
-                setLikesCount(likesCount - 1);
-                dispatch(dislikeArticle(slug));
-              } else {
-                setLikesCount(likesCount + 1);
-                dispatch(likeArticle(slug));
-              }
-              setLiked(!liked);
-            }}
-            className={style.btn_like}
-            type="button"
-          >
+          <button disabled={!login} onClick={changeLike} className={style.btn_like} type="button">
             <img src={liked ? like : dislike} alt="like" />
             {likesCount}
           </button>
@@ -74,7 +71,6 @@ CardItem.defaultProps = {
   title: '',
   description: '',
   updatedAt: '',
-  author: '',
   slug: '',
   favoritesCount: 0,
   favorited: false,
@@ -85,7 +81,6 @@ CardItem.propTypes = {
   description: PropTypes.string,
   updatedAt: PropTypes.string,
   tagList: PropTypes.arrayOf(PropTypes.string),
-  author: PropTypes.string,
   slug: PropTypes.string,
   favoritesCount: PropTypes.number,
   favorited: PropTypes.bool,

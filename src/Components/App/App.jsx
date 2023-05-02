@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -18,10 +18,11 @@ import './App.scss';
 
 function App() {
   const dispatch = useDispatch();
+  const { login, user } = useSelector((state) => state.User);
+  const { currentArticle } = useSelector((state) => state.Articles);
   const token = JSON.parse(localStorage.getItem('token'));
   useEffect(() => {
     if (token) dispatch(getCurrentUser(token));
-
     dispatch(fetchData(0));
   }, []);
 
@@ -33,9 +34,12 @@ function App() {
         <Route path="/articles" Component={CardList} />
         <Route path="/sign-in" Component={LoginIn} />
         <Route path="/sign-up" Component={SignUp} />
-        <Route path="/profile" Component={ProfileEdit} />
-        <Route path="/new-article" Component={CreateArticle} />
-        <Route path="/articles/:id/edit" Component={EditArticle} />
+        <Route path="/profile" Component={login ? ProfileEdit : LoginIn} />
+        <Route path="/new-article" Component={login ? CreateArticle : LoginIn} />
+        <Route
+          path="/articles/:id/edit"
+          Component={user.username === currentArticle.author.username && login ? EditArticle : Article}
+        />
         <Route path="/articles/:id" Component={Article} />
         <Route path="/success" Component={SuccessPage} />
       </Routes>

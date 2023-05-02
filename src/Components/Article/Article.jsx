@@ -31,6 +31,40 @@ function Article() {
   }, []);
 
   const tags = tagList.map((i) => <Tag key={uuid()}>{i}</Tag>);
+  const authorBtn = (
+    <div className={style.card__author_btn}>
+      <Popconfirm
+        title="Delete the task"
+        description="Are you sure to delete this article?"
+        okText="Yes"
+        cancelText="No"
+        onConfirm={() => {
+          dispatch(deleteArticle(id));
+          navigate('/success', { replace: true });
+        }}
+      >
+        <button type="button">Delete</button>
+      </Popconfirm>
+      <button
+        type="button"
+        onClick={() => {
+          navigate(`/articles/${id}/edit`, { replace: true });
+        }}
+      >
+        Edit
+      </button>
+    </div>
+  );
+  function changeLike() {
+    if (liked) {
+      setLikesCount(likesCount - 1);
+      dispatch(dislikeArticle(id));
+    } else {
+      setLikesCount(likesCount + 1);
+      dispatch(likeArticle(id));
+    }
+    setLiked(!liked);
+  }
 
   return (
     <div className={style.card}>
@@ -41,21 +75,7 @@ function Article() {
           <div className={style.card__info}>
             <div className={style.card__title_sec}>
               <h3 className={style.card__title}>{title}</h3>
-              <button
-                disabled={!login}
-                onClick={() => {
-                  if (liked) {
-                    setLikesCount(likesCount - 1);
-                    dispatch(dislikeArticle(id));
-                  } else {
-                    setLikesCount(likesCount + 1);
-                    dispatch(likeArticle(id));
-                  }
-                  setLiked(!liked);
-                }}
-                className={style.btn_like}
-                type="button"
-              >
+              <button disabled={!login} onClick={changeLike} className={style.btn_like} type="button">
                 <img src={liked ? like : dislike} alt="like" />
                 {likesCount}
               </button>
@@ -77,31 +97,7 @@ function Article() {
               </div>
               <img className={style.card__author_img} src={author.image ? author.image : avt} alt="avatar" />
             </div>
-
-            {user.username === author.username ? (
-              <div className={style.card__author_btn}>
-                <Popconfirm
-                  title="Delete the task"
-                  description="Are you sure to delete this article?"
-                  okText="Yes"
-                  cancelText="No"
-                  onConfirm={() => {
-                    dispatch(deleteArticle(id));
-                    navigate('/success', { replace: true });
-                  }}
-                >
-                  <button type="button">Delete</button>
-                </Popconfirm>
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigate(`/articles/${id}/edit`, { replace: true });
-                  }}
-                >
-                  Edit
-                </button>
-              </div>
-            ) : null}
+            {user.username === author.username ? authorBtn : null}
           </div>
         </>
       )}
