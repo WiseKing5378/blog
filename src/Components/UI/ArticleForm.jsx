@@ -7,6 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import inputRules from '../../InputValidationRules/Rules';
+
+import Input from './Input';
+import Btn from './Btn';
 import style from './ArticleForm.module.scss';
 
 function ArticleForm(props) {
@@ -14,6 +18,7 @@ function ArticleForm(props) {
   const navigate = useNavigate();
   const { title, fn, formType } = props;
   const { status, currentArticle } = useSelector((state) => state.Articles);
+  const { requiredRules } = inputRules;
 
   const {
     register,
@@ -44,32 +49,23 @@ function ArticleForm(props) {
     <form className={style.form} onSubmit={handleSubmit(onSubmit)}>
       <h3 className={style.form__title}>{title}</h3>
       <div className={style.form__input}>
-        <label htmlFor="title" className={style.label}>
-          Title
-          <input
-            defaultValue={formType === 'edit' ? currentArticle.title : null}
-            type="text"
-            {...register('title', { required: 'Required to fill in' })}
-            id="title"
-            className={style.input}
-            placeholder="Title"
-          />
-          <div style={{ color: 'rgba(245, 34, 45, 1)' }}>{errors.title ? <p>{errors.title.message}</p> : null}</div>
-        </label>
-        <label htmlFor="description" className={style.label}>
-          Short description
-          <input
-            defaultValue={formType === 'edit' ? currentArticle.description : null}
-            type="text"
-            {...register('description', { required: 'Required to fill in' })}
-            id="description"
-            className={style.input}
-            placeholder="Short description"
-          />
-          <div style={{ color: 'rgba(245, 34, 45, 1)' }}>
-            {errors.description ? <p>{errors.description.message}</p> : null}
-          </div>
-        </label>
+        <Input
+          defaultValue={formType === 'edit' ? currentArticle.title : null}
+          title="Title"
+          name="title"
+          type="text"
+          register={{ ...register('title', { ...requiredRules }) }}
+          errors={errors.title ? <p>{errors.title.message}</p> : null}
+        />
+        <Input
+          defaultValue={formType === 'edit' ? currentArticle.description : null}
+          title="Short description"
+          name="description"
+          type="text"
+          register={{ ...register('description', { ...requiredRules }) }}
+          errors={errors.description ? <p>{errors.description.message}</p> : null}
+        />
+
         <label htmlFor="body" className={style.label}>
           Text
           <textarea
@@ -93,19 +89,15 @@ function ArticleForm(props) {
                   {...register(`tagList.${index}`, { required: true })}
                 />
 
-                <button className={`${style.btn} ${style.btn_red}`} type="button" onClick={() => remove(index)}>
+                <Btn clas="btn btn_red" fn={() => remove(index)}>
                   Delete
-                </button>
+                </Btn>
               </li>
             ))}
           </ul>
-          <button
-            className={`${style.btn} ${style.btn_blue} ${style.btn_bottom}`}
-            type="button"
-            onClick={() => append()}
-          >
+          <Btn clas="btn btn_blue btn_large btn_bottom" fn={() => append()}>
             Add tag
-          </button>
+          </Btn>
         </div>
       </div>
 

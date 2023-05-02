@@ -10,6 +10,7 @@ import { likeArticle, dislikeArticle, getArticle, deleteArticle } from '../../St
 import like from '../../Assets/like.png';
 import dislike from '../../Assets/dislike.png';
 import avt from '../../Assets/avatar.png';
+import Btn from '../UI/Btn';
 
 import style from './Article.module.scss';
 
@@ -32,7 +33,7 @@ function Article() {
 
   const tags = tagList.map((i) => <Tag key={uuid()}>{i}</Tag>);
   const authorBtn = (
-    <div className={style.card__author_btn}>
+    <div className={style.card__author_btnSec}>
       <Popconfirm
         title="Delete the task"
         description="Are you sure to delete this article?"
@@ -43,16 +44,18 @@ function Article() {
           navigate('/success', { replace: true });
         }}
       >
-        <button type="button">Delete</button>
+        <button className={style.card__author_btn} type="button">
+          Delete
+        </button>
       </Popconfirm>
-      <button
-        type="button"
-        onClick={() => {
+      <Btn
+        clas="btn btn_green"
+        fn={() => {
           navigate(`/articles/${id}/edit`, { replace: true });
         }}
       >
         Edit
-      </button>
+      </Btn>
     </div>
   );
   function changeLike() {
